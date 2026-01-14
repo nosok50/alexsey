@@ -201,8 +201,11 @@
                     <div class="glass-panel p-3 rounded-3xl transition-all duration-300 hover:shadow-neon hover:-translate-y-2 border border-slate-100/50">
                         <!-- 16:9 Image Container -->
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-brand-100 mb-4">
-                            <!-- Title Image Used Here -->
-                            <img src="./EcoCityTitle.png" onerror="this.src='https://placehold.co/1280x720/1C52F2/FFFFFF?text=Eco+City+Gameplay'" alt="Eco City" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700">
+                            <!-- Image Fallback: Will show placehold.co image if local file is missing -->
+                            <img src="./EcoCityTitle.png" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/1280x720/1C52F2/FFFFFF?text=Eco+City+Gameplay'" 
+                                 alt="Eco City" 
+                                 class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700">
                             
                             <div class="absolute top-3 left-3 flex gap-2">
                                 <span class="bg-white/90 backdrop-blur text-brand-700 text-xs font-bold px-2 py-1 rounded-lg shadow-sm">
@@ -221,7 +224,7 @@
                             </div>
                             <p class="text-slate-500 mb-4 line-clamp-2">Strategy Simulator. A full-cycle mobile strategy game developed and shipped to Google Play.</p>
                             
-                            <!-- Updated Tags on Card -->
+                            <!-- Tags -->
                             <div class="flex flex-wrap gap-2">
                                 <span class="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-1 rounded-md">Unity 6.0</span>
                                 <span class="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-1 rounded-md">Zenject</span>
@@ -238,8 +241,11 @@
                     <div class="glass-panel p-3 rounded-3xl transition-all duration-300 hover:shadow-neon hover:-translate-y-2 border border-slate-100/50">
                         <!-- 16:9 Image Container -->
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-emerald-100 mb-4">
-                            <!-- Title Image Used Here -->
-                            <img src="./WordsTitle.png" onerror="this.src='https://placehold.co/1280x720/10b981/FFFFFF?text=Words+Puzzle+Game'" alt="Words Game" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700">
+                            <!-- Image Fallback -->
+                            <img src="./WordsTitle.png" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/1280x720/10b981/FFFFFF?text=Words+Puzzle+Game'" 
+                                 alt="Words Game" 
+                                 class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700">
                             
                             <div class="absolute top-3 left-3 flex gap-2">
                                 <span class="bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-2 py-1 rounded-lg shadow-sm">
@@ -370,6 +376,9 @@
     <!-- DATA & LOGIC -->
     <script>
         // Project Data
+        // IMAGES ARRAY STRUCTURE:
+        // Index [0] = Title/Cover Image (Shows on card & modal header)
+        // Index [1+] = Gallery Images (Shows in modal grid)
         const projectsData = {
             'eco-city': {
                 title: 'Eco City: Strategy Simulator',
@@ -385,13 +394,12 @@
                 links: [
                     { text: 'Get on Google Play', url: 'https://play.google.com/store/apps/details?id=com.nosok.EcoCityInc&pcampaignid=web_share', icon: 'ph-google-play-logo' }
                 ],
-                // Added EcoCityTitle.png to the start of the array
                 images: [
-                    './EcoCityTitle.png',
-                    './EcoCity1.png',
-                    './EcoCity2.png',
-                    './EcoCity3.png',
-                    './EcoCity4.png'
+                    './EcoCityTitle.png', // [0] Title
+                    './EcoCity1.png',     // [1] Gallery
+                    './EcoCity2.png',     // [2] Gallery
+                    './EcoCity3.png',     // [3] Gallery
+                    './EcoCity4.png'      // [4] Gallery
                 ]
             },
             'words': {
@@ -408,12 +416,11 @@
                 links: [
                     { text: 'View on GitHub', url: 'https://github.com/nosok50/WordsUnity', icon: 'ph-github-logo' }
                 ],
-                // Added WordsTitle.png to the start of the array
                 images: [
-                    './WordsTitle.png',
-                    './WordsScreen1.png',
-                    './WordsScreen2.png',
-                    './WordsScreen3.png'
+                    './WordsTitle.png',   // [0] Title
+                    './WordsScreen1.png', // [1] Gallery
+                    './WordsScreen2.png', // [2] Gallery
+                    './WordsScreen3.png'  // [3] Gallery
                 ]
             }
         };
@@ -457,10 +464,16 @@
             const data = projectsData[projectId];
             if (!data) return;
 
+            // Separate the cover (first image) from gallery (rest)
+            const coverImage = data.images[0];
+            const galleryImages = data.images.slice(1);
+
             // Generate Content HTML
             let html = `
                 <div class="h-64 md:h-80 bg-slate-200 w-full relative overflow-hidden">
-                    <img src="${data.images[0]}" onerror="this.src='https://placehold.co/800x450/e2e8f0/475569?text=Image+Not+Found'" class="w-full h-full object-cover">
+                    <img src="${coverImage}" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/800x450/e2e8f0/475569?text=Image+Not+Found'" 
+                         class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
                         <div class="text-brand-300 font-bold text-sm uppercase tracking-wider mb-1">${data.subtitle}</div>
                         <h2 class="text-3xl md:text-4xl font-bold text-white">${data.title}</h2>
@@ -484,7 +497,7 @@
                     <!-- Screenshot Gallery Grid -->
                     <h4 class="font-bold text-slate-900 mb-3">Gallery</h4>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                         ${data.images.map(img => `<div class="rounded-xl overflow-hidden aspect-video bg-slate-100 cursor-pointer hover:opacity-90 transition-opacity"><img src="${img}" onerror="this.src='https://placehold.co/800x450/e2e8f0/475569?text=Image+Not+Found'" class="w-full h-full object-cover"></div>`).join('')}
+                         ${galleryImages.map(img => `<div class="rounded-xl overflow-hidden aspect-video bg-slate-100 cursor-pointer hover:opacity-90 transition-opacity"><img src="${img}" onerror="this.onerror=null; this.src='https://placehold.co/800x450/e2e8f0/475569?text=Image+Not+Found'" class="w-full h-full object-cover"></div>`).join('')}
                     </div>
 
                     <div class="flex gap-4 pt-4 border-t border-slate-100">
